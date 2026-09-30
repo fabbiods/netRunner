@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NetRunner</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/vendor/xterm/xterm.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <aside class="sidebar" aria-label="Navegação do inventário">
+        <header class="brand">
+          <img class="brand-mark" src="/favicon.png" alt="" aria-hidden="true" />
+          <span><strong>NetRunner</strong><small>inventário local</small></span>
+        </header>
+
+        <label class="search-box" for="global-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="global-search" type="search" placeholder="Buscar dispositivos" autocomplete="off" />
+          <kbd>⌘K</kbd>
+        </label>
+
+        <nav class="smart-filters" aria-label="Filtros rápidos">
+          <button type="button" data-filter="favorites"><span aria-hidden="true">★</span> Favoritos <b id="favorite-count">0</b></button>
+          <button type="button" data-filter="recent"><span aria-hidden="true">◷</span> Recentes</button>
+          <button type="button" data-filter="legacy"><span class="legacy-dot" aria-hidden="true"></span> Criptografia legada <b id="legacy-count">0</b></button>
+        </nav>
+
+        <section class="tree-section" aria-labelledby="locations-heading">
+          <div class="section-heading">
+            <h2 id="locations-heading">Localidades</h2>
+            <button type="button" class="icon-button" data-action="new-location" aria-label="Cadastrar localidade">＋</button>
+          </div>
+          <div id="location-tree" class="location-tree" role="tree"></div>
+        </section>
+
+        <footer class="sidebar-footer">
+          <div id="runtime-status" class="runtime-status runtime-status--checking" role="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="runtime-status-text">Validando serviço local…</span>
+          </div>
+          <button type="button" class="primary-button full-button" data-action="new-device">＋ Dispositivo</button>
+        </footer>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-header">
+          <div>
+            <p class="eyebrow">Marco 6 · Operação local segura</p>
+            <h1 id="view-title">Dispositivos</h1>
+          </div>
+          <div class="header-actions">
+            <button type="button" class="secondary-button" data-action="quick-connect">Conexão rápida</button>
+            <button type="button" class="secondary-button" data-action="open-import">Importar</button>
+            <button type="button" class="secondary-button" data-action="export-json">Exportar JSON</button>
+            <button type="button" class="primary-button" data-action="new-device">＋ Novo dispositivo</button>
+          </div>
+        </header>
+
+        <nav class="view-tabs" aria-label="Menu principal">
+          <button id="sessions-navigation" type="button" class="view-tab" data-action="open-sessions">Sessões <b id="session-count">0</b></button>
+          <details class="view-menu" data-navigation-group="registration">
+            <summary>Cadastro</summary>
+            <div class="view-menu-items" role="menu" aria-label="Cadastro">
+              <button type="button" role="menuitem" data-view="locations">Localidades</button>
+              <button type="button" role="menuitem" data-view="usernames">Username</button>
+              <button type="button" role="menuitem" class="is-active" data-view="devices">Dispositivos</button>
+            </div>
+          </details>
+          <details class="view-menu" data-navigation-group="operation">
+            <summary>Operação</summary>
+            <div class="view-menu-items" role="menu" aria-label="Operação">
+              <button type="button" role="menuitem" data-view="health">Saúde</button>
+              <button type="button" role="menuitem" data-view="runbooks">Runbooks</button>
+              <button type="button" role="menuitem" data-view="snapshots">Snapshots</button>
+              <button type="button" role="menuitem" data-view="history">Histórico</button>
+            </div>
+          </details>
+          <details class="view-menu" data-navigation-group="administration">
+            <summary>Administração</summary>
+            <div class="view-menu-items" role="menu" aria-label="Administração">
+              <button type="button" role="menuitem" data-view="trust">Confianças</button>
+              <button type="button" role="menuitem" data-view="settings">Configurações</button>
+            </div>
+          </details>
+        </nav>
+
+        <section id="terminal-workspace" class="terminal-workspace" hidden aria-label="Sessões SSH">
+          <div id="session-tabs" class="session-tabs" role="tablist" aria-label="Sessões SSH abertas"></div>
+          <div id="handshake-line" class="handshake-line" aria-label="Etapas da conexão">
+            <span data-stage="tcp">TCP</span><span data-stage="host-key">Host key</span><span data-stage="authentication">Autenticação</span><span data-stage="shell">Shell</span>
+          </div>
+          <div class="terminal-body">
+            <div id="terminal-panels" class="terminal-panels"></div>
+            <aside id="session-tools" class="session-tools" aria-label="Runbooks da sessão ativa"></aside>
+          </div>
+          <footer id="terminal-status" class="terminal-status">Aguardando conexão…</footer>
+        </section>
+
+        <section id="summary" class="summary-grid" aria-label="Resumo do inventário"></section>
+        <section id="bulk-toolbar" class="bulk-toolbar" hidden aria-label="Edição em massa"></section>
+        <section id="content" class="content-panel" aria-live="polite">
+          <div class="loading-state">Carregando inventário local…</div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <dialog id="editor-dialog" class="editor-dialog" aria-labelledby="dialog-title">
+      <form id="editor-form" method="dialog">
+        <header class="dialog-header">
+          <div>
+            <p class="eyebrow" id="dialog-eyebrow">Inventário</p>
+            <h2 id="dialog-title">Editar</h2>
+          </div>
+          <button type="button" class="icon-button" data-action="close-dialog" aria-label="Fechar">×</button>
+        </header>
+        <div id="dialog-content" class="dialog-content"></div>
+        <footer class="dialog-footer">
+          <button type="button" class="secondary-button" data-action="close-dialog">Cancelar</button>
+          <button id="dialog-submit" type="submit" class="primary-button">Salvar</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="command-dialog" class="command-dialog" aria-labelledby="command-title">
+      <div class="command-header">
+        <label for="command-search" id="command-title">Paleta de comandos</label>
+        <input id="command-search" type="search" role="combobox" aria-controls="command-results" aria-expanded="true" aria-autocomplete="list" autocomplete="off" placeholder="Buscar dispositivo ou ação" />
+        <kbd>esc</kbd>
+      </div>
+      <div id="command-results" class="command-results" role="listbox"></div>
+    </dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

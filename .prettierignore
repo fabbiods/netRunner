@@ -1,0 +1,6 @@
+node_modules
+.vite
+out
+coverage
+package-lock.json
+NetRunner_prompt_Codex.md

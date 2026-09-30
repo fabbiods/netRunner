@@ -1,0 +1,59 @@
+# Dependencies and generated artifacts
+node_modules/
+.vite/
+out/
+coverage/
+playwright-report/
+test-results/
+
+# Local application data
+/data/
+/database/
+/backups/
+/logs/
+/Logs/
+/recordings/
+/exports/
+/imports/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.wal
+*.shm
+*.backup
+*.bak
+*.session.txt
+*.sha256
+netrunner-export-*
+
+# Credentials and private key material
+.env
+.env.*
+!.env.example
+.npmrc.local
+.npmrc.user
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.crt
+*.cer
+id_rsa*
+id_ed25519*
+
+# Logs and local diagnostics
+*.log
+npm-debug.log*
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

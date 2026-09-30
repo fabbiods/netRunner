@@ -1,0 +1,32 @@
+[
+  {
+    "vendor": "cisco",
+    "input": "\u001b[32mCisco IOS XE Software\u001b[0m --More--\r\n",
+    "expected": "Cisco IOS XE Software"
+  },
+  {
+    "vendor": "huawei",
+    "input": "Huawei Versatile Routing Platform  ---- More ----\r\n",
+    "expected": "Huawei Versatile Routing Platform"
+  },
+  {
+    "vendor": "juniper",
+    "input": "Junos: 23.4R1---(more)---\r\n",
+    "expected": "Junos: 23.4R1"
+  },
+  {
+    "vendor": "ruckus",
+    "input": "FastIron 10.0 Press Enter to continue\r\n",
+    "expected": "FastIron 10.0"
+  },
+  {
+    "vendor": "fortinet",
+    "input": "FortiGate-VM64 v7.4.4\b5\r\n",
+    "expected": "FortiGate-VM64 v7.4.5"
+  },
+  {
+    "vendor": "aruba",
+    "input": "ArubaOS-CX PL.10.13\r\n",
+    "expected": "ArubaOS-CX PL.10.13"
+  }
+]
